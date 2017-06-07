@@ -1,38 +1,4 @@
- #include<stdio.h>
-#include<math.h>
-#include<stdlib.h>
-/*Realizzare un'applicazione per gestire numeri razionali. L’applicazione deve gestire ciascun numero razionale come una struttura con due campi, che rappresentano numeratore e denominatore del numero razionale.
-L’applicazione deve permettere all’utente di svolgere le seguenti funzionalità.
-Inserimento di un nuovo numero razionale in testa alla lista.
-Cancellazione del numero razionale in fondo alla lista.
-Visualizzazione della lista corrente di numeri razionali.
-Ordinamento della lista di numeri razionali in base al loro valore.
-Riduzione di tutti i numeri razionali della lista ai minimi termini.
-All’avvio dell’esecuzione l’applicazione deve inizializzare la lista di numeri razionali con i valori letti da un file; al termine dell’esecuzione l’applicazione deve salvare i dati della lista nello stesso file.
-*/
-struct razionale{
-    int numeratore;
-    int denominatore;
-};
-
-struct Nodo{
-    struct razionale valore;
-    struct Nodo* next;
-    
-};
-
-void inserisciNodo(struct Nodo* head){
-printf("inserisi nuovo razionale prima denominatore poi numeratore \n");
-struct Nodo* puntanodo;
-puntanodo=malloc(sizeof(struct Nodo));
-scanf("%d",&(puntanodo->valore.denominatore));
-scanf("%d",&(puntanodo->valore.numeratore));
-puntanodo->next=head;
-head=puntanodo;
-}
-
-
-void cancellaultimo(struct Nodo* head){
+ void cancellaultimo(struct Nodo* head){
     struct Nodo *nodo,*prec;
     nodo=head;
     int s;
@@ -50,8 +16,9 @@ else printf("grazie comunque\n");}
 void visualizzal(struct Nodo* head){
     struct Nodo* puntanodo;
     puntanodo=head;
-    while(puntanodo->next==NULL){
+    while(puntanodo !=NULL){
         printf("il numero è %d fratto %d \n",puntanodo->valore.numeratore,puntanodo->valore.denominatore );
+        
     puntanodo=puntanodo->next;}
     
     }
@@ -90,7 +57,7 @@ void riduzione(struct Nodo* head){
 
 
 struct Nodo* leggilista(){
-FILE* fp= fopen("razionali","r");
+FILE* fp= fopen("razionali.txt","r");
 struct Nodo* head = NULL;
 struct Nodo* precedente;
 struct Nodo* successivo;
@@ -115,25 +82,31 @@ if(fp!=NULL){
         else precedente->next=NULL;
         }while(letto);
     }
-}return head;
+    
+}fclose(fp);
+
+return head;
 }
 
 void salvataggio(struct Nodo* head){
-    FILE* fp = fopen("razionali","w");
+    FILE* fp = fopen("razionali.txt","w");
     while(head!=NULL){
         fwrite(&(head->valore),sizeof(struct razionale),1,fp);
         head=head->next;
-    }
+    }fclose(fp);
 }
 
 int main(){
     int t;
-struct Nodo* head=leggilista();
+
+struct Nodo* head=leggilistatastiera();
 do{
-    printf("inserisci \n 1per ordinare la lista \n 2 per eliminare un elemento in coda \n 3 per eliminare l ultimo valore in coda \n 4 per visualizare la lista \n 5 per salvare la lista \n 9 per chiudere \n");
+    printf("inserisci \n 1per ordinare la lista  \n 2 per eliminare l ultimo valore in coda \n 3 per visualizare la lista \n 4per salvare la lista \n 9 per chiudere \n");
     scanf("%d",&t);
-    if(t==4)visualizzal(head);
-    
+    if(t==1)ordina(head);
+    if(t==2)cancellaultimo(head);
+    if(t==3)visualizzal(head);
+    if(t==4)salvataggio(head);
 }while(t!=9);
 
 
